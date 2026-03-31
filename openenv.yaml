@@ -1,0 +1,47 @@
+name: healthcare-triage-env
+
+description: 
+  This project simulates a simple healthcare triage system where an AI agent
+  is given patient details such as symptoms, age, and medical history, and
+  must decide the most appropriate course of action. The goal is to mimic
+  how initial medical decisions are made in real-life scenarios, such as
+  whether a patient can manage at home, should visit a doctor, or requires
+  immediate emergency care.
+
+version: 1.0
+
+observation_space:
+  type: object
+  properties:
+    symptoms:
+      type: array
+      items:
+        type: string
+    age:
+      type: integer
+    history:
+      type: string
+
+action_space:
+  type: string
+  enum:
+    - home_care
+    - visit_doctor
+    - emergency
+    - ask_more
+
+tasks:
+  - name: easy
+    description: 
+      Handles simple cases with mild symptoms where the correct decision
+      is usually straightforward.
+
+  - name: medium
+    description: 
+      Covers moderately serious conditions that require a bit more judgment,
+      such as deciding whether medical consultation is needed.
+
+  - name: hard
+    description: 
+      Focuses on critical situations where identifying emergencies quickly
+      is essential.
