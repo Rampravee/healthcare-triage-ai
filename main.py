@@ -1,14 +1,41 @@
+from fastapi import FastAPI
+from env import HealthEnv
 import gradio as gr
-from env import HealthEnv, ACTIONS
+
+app = FastAPI()
+env = HealthEnv()
+
+
+
+@app.post("/reset")
+def reset():
+    obs = env.reset("easy")
+    return {
+        "symptoms": obs.symptoms,
+        "age": obs.age,
+        "history": obs.history
+    }
+
+@app.post("/step")
+def step(action: str):
+    obs, reward, done, _ = env.step(action)
+    return {
+        "symptoms": obs.symptoms,
+        "age": obs.age,
+        "history": obs.history,
+        "reward": reward,
+        "done": done
+    }
+
+
 
 def run_simulation():
-    env = HealthEnv()
+    env_local = HealthEnv()
     output = ""
-
     total_score = 0
 
     for level in ["easy", "medium", "hard"]:
-        obs = env.reset(level)
+        obs = env_local.reset(level)
 
         symptoms_text = " ".join(obs.symptoms).lower()
 
@@ -21,8 +48,8 @@ def run_simulation():
         else:
             action = "ask_more"
 
-        obs, reward, done, _ = env.step(action)
-        score = env.grade(action)
+        obs, reward, done, _ = env_local.step(action)
+        score = env_local.grade(action)
 
         total_score += score
 
@@ -38,7 +65,6 @@ def run_simulation():
     output += f"\n# 🧾 FINAL RESULT\n\n**Average Score:** `{total_score / 3:.2f}`"
 
     return output
-
 
 demo = gr.Interface(
     fn=run_simulation,
