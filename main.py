@@ -1,8 +1,7 @@
 import gradio as gr
 from fastapi import FastAPI
 from env import HealthEnv
-import uvicorn
-from threading import Thread
+from gradio.routes import mount_gradio_app
 
 app = FastAPI()
 env = HealthEnv()
@@ -74,9 +73,4 @@ demo = gr.Interface(
     description="Simulates AI decision-making for patient triage."
 )
 
-def run_api():
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
-Thread(target=run_api).start()
-
-demo.launch(server_name="0.0.0.0", server_port=7860)
+app = mount_gradio_app(app, demo, path="/")
