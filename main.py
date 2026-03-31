@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from env import HealthEnv
+import uvicorn
 
 app = FastAPI()
 env = HealthEnv()
@@ -27,3 +28,7 @@ def step(action: str):
 @app.get("/")
 def home():
     return {"message": "API is running"}
+
+# 🔥 THIS IS THE MISSING PART
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=7860)
