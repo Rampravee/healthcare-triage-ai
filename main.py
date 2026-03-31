@@ -1,9 +1,9 @@
 import gradio as gr
 from fastapi import FastAPI
 from env import HealthEnv
-from gradio.routes import mount_gradio_app
 
 app = FastAPI()
+
 env = HealthEnv()
 
 
@@ -65,6 +65,7 @@ def run_simulation():
 
     return output
 
+
 demo = gr.Interface(
     fn=run_simulation,
     inputs=[],
@@ -73,4 +74,4 @@ demo = gr.Interface(
     description="Simulates AI decision-making for patient triage."
 )
 
-app = mount_gradio_app(app, demo, path="/")
+demo.launch(server_name="0.0.0.0", server_port=7860)
