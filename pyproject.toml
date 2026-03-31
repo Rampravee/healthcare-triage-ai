@@ -1,0 +1,11 @@
+[project]
+name = "healthcare-triage-ai"
+version = "0.1.0"
+description = "AI-powered healthcare triage system"
+authors = [
+    {name = "Rampraveen"}
+]
+dependencies = [
+    "fastapi",
+    "uvicorn"
+]
