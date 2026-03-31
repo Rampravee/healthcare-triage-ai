@@ -1,10 +1,11 @@
+import gradio as gr
 from fastapi import FastAPI
 from env import HealthEnv
-import gradio as gr
+import uvicorn
+from threading import Thread
 
 app = FastAPI()
 env = HealthEnv()
-
 
 
 @app.post("/reset")
@@ -26,7 +27,6 @@ def step(action: str):
         "reward": reward,
         "done": done
     }
-
 
 
 def run_simulation():
@@ -73,5 +73,10 @@ demo = gr.Interface(
     title="Healthcare Triage AI 🏥",
     description="Simulates AI decision-making for patient triage."
 )
+
+def run_api():
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+Thread(target=run_api).start()
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
